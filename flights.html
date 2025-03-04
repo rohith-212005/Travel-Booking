@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Booking - BookMyTickets</title>
+    <link rel="stylesheet" href="flights.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Filters</h2>
+            <div class="filter-section">
+                <h4>Flight Class</h4>
+                <label><input type="checkbox" class="flight-filter"> Business</label>
+                <label><input type="checkbox" class="flight-filter"> Economy</label>
+                <label><input type="checkbox" class="flight-filter"> Student</label>
+            </div>
+
+            <div class="filter-section">
+                <h4>Arrival Time</h4>
+                <button class="time-filter">12am - 6am</button>
+                <button class="time-filter">6am - 12pm</button>
+                <button class="time-filter">12pm - 6pm</button>
+                <button class="time-filter">6pm - 12am</button>
+            </div>
+        </aside>
+
+        <!-- Main Content (Flight/Train Listings) -->
+        <main class="main-content">
+            <!-- Flight Section -->
+            <section id="flights">
+                <h2>Available Flights</h2>
+                <div class="listing">
+                    <!-- Flight 1 -->
+                    <div class="flight-item">
+                        <h3>Air India</h3>
+                        <p>Depart: SMTWTFS</p>
+                        <p>Class: NON-STOP</p>
+                        <span>₹5346</span>
+                        <button class="book-button" onclick="bookNow('Air India', '₹5346')">Book Now</button>
+                    </div>
+                    <!-- Flight 2 -->
+                    <div class="flight-item">
+                        <h3>Indigo</h3>
+                        <p>Depart: SMTWTFS</p>
+                        <p>Class: 1-Stop</p>
+                        <span>₹5340</span>
+                        <button class="book-button" onclick="bookNow('Indigo', '₹5340')">Book Now</button>
+                    </div>
+                    
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function bookNow(ticketName, ticketPrice) {
+            // Redirect to the payment page with ticket details as URL parameters
+            window.location.href = `payment.php?ticketName=${encodeURIComponent(ticketName)}&ticketPrice=${encodeURIComponent(ticketPrice)}`;
+        }
+    </script>
+    <!-- Add this script inside the <body> of flights.html -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromLocation = urlParams.get("from");
+        const toLocation = urlParams.get("to");
+
+        const availableFlights = [
+            {
+                name: "Air India",
+                from: "Delhi",
+                to: "Mumbai",
+                price: "₹5346",
+                class: "NON-STOP",
+            },
+            {
+                name: "Indigo",
+                from: "Mumbai",
+                to: "Delhi",
+                price: "₹5340",
+                class: "1-Stop",
+            }
+        ];
+
+        const listingContainer = document.querySelector(".listing");
+        listingContainer.innerHTML = ""; // Clear existing listings
+
+        availableFlights.forEach(flight => {
+            if ((flight.from === fromLocation && flight.to === toLocation) || (!fromLocation && !toLocation)) {
+                const flightItem = document.createElement("div");
+                flightItem.classList.add("flight-item");
+                flightItem.innerHTML = `
+                    <h3>${flight.name}</h3>
+                    <p>Depart: SMTWTFS</p>
+                    <p>Class: ${flight.class}</p>
+                    <span>${flight.price}</span>
+                    <button class="book-button" onclick="bookNow('${flight.name}', '${flight.price}')">Book Now</button>
+                `;
+                listingContainer.appendChild(flightItem);
+            }
+        });
+    });
+</script>
+
+    <script src="flights.js"></script>
+</body>
+</html>
